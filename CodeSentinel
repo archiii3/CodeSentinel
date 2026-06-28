@@ -1,0 +1,66 @@
+import os
+import hashlib
+import json
+from collections import defaultdict
+
+class CodeSentinel:
+    def __init__(self, directory):
+        self.directory = directory
+        self.duplicates = defaultdict(list)
+
+    def file_hash(self, filepath):
+        hasher = hashlib.sha256()
+        with open(filepath, "rb") as f:
+            while chunk := f.read(4096):
+                hasher.update(chunk)
+        return hasher.hexdigest()
+
+    def scan(self):
+        hashes = {}
+        for root, _, files in os.walk(self.directory):
+            for file in files:
+                path = os.path.join(root, file)
+                try:
+                    h = self.file_hash(path)
+                    if h in hashes:
+                        self.duplicates[h].append(path)
+                        self.duplicates[h].append(hashes[h])
+                    else:
+                        hashes[h] = path
+                except Exception:
+                    pass
+
+    def report(self):
+        result = {
+            "duplicate_groups": [
+                list(set(paths))
+                for paths in self.duplicates.values()
+            ]
+        }
+
+        with open("report.json", "w") as f:
+            json.dump(result, f, indent=4)
+
+        print("Scan complete.")
+        print(f"Duplicate groups found: {len(result['duplicate_groups'])}")
+
+if __name__ == "__main__":
+    scanner = CodeSentinel(".")
+    scanner.scan()
+    scanner.report()
+# CodeSentinel
+
+CodeSentinel is a lightweight Python utility that scans directories, detects duplicate files using SHA-256 hashing, and generates a JSON report.
+
+## Features
+
+- Fast recursive scanning
+- SHA-256 duplicate detection
+- JSON reporting
+- Clean and modular code
+- Easy to extend
+
+## Usage
+
+```bash
+python main.py
