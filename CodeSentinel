@@ -8,13 +8,6 @@ class CodeSentinel:
         self.directory = directory
         self.duplicates = defaultdict(list)
 
-    def file_hash(self, filepath):
-        hasher = hashlib.sha256()
-        with open(filepath, "rb") as f:
-            while chunk := f.read(4096):
-                hasher.update(chunk)
-        return hasher.hexdigest()
-
     def scan(self):
         hashes = {}
         for root, _, files in os.walk(self.directory):
@@ -38,6 +31,12 @@ class CodeSentinel:
             ]
         }
 
+    def file_hash(self, filepath):
+        hasher = hashlib.sha256()
+        with open(filepath, "rb") as f:
+            while chunk := f.read(4096):
+                hasher.update(chunk)
+        return hasher.hexdigest()
         with open("report.json", "w") as f:
             json.dump(result, f, indent=4)
 
