@@ -49,9 +49,6 @@ if __name__ == "__main__":
     scanner.report()
 # CodeSentinel
 
-CodeSentinel is a lightweight Python utility that scans directories, detects duplicate files using SHA-256 hashing, and generates a JSON report.
-
-
 if __name__ == "__main__":
     scanner = CodeSentinel(".")
     scanner.scan()
@@ -59,7 +56,6 @@ if __name__ == "__main__":
 # CodeSentinel
 
 ## Features
-
 - Fast recursive scanning
 - SHA-256 duplicate detection
 - JSON reporting
