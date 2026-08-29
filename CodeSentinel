@@ -19,6 +19,9 @@ class CodeSentinel:
                         self.duplicates[h].append(path)
                         self.duplicates[h].append(hashes[h])
                     else:
+y:
+                    h = self.file_hash(path)
+                    if h in hashes:
                         hashes[h] = path
                 except Exception:
                     pass
